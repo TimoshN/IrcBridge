@@ -1,5 +1,6 @@
 const settings = require('./settings.js');
 const irc = require('./irc.js');
+const token = require('./token.json');
 
 var ircClients = {}
 
@@ -144,7 +145,7 @@ client.on('message', msg => {
 client.on('error', function(e){
     console.log(e)
 })
-client.login('NTgxOTY4MTc2MDU3ODEwOTQ2.XOm_MA.yuWs2cmSXUPOHQKEiMAF6i1NA-s');
+client.login(token.d_token);
 
 
 
