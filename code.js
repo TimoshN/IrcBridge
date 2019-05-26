@@ -82,7 +82,7 @@ const commands = {
 
             let channels = ircClients[msg.author.id].chans
             let user_list = []
-            for (let name in channels['#wowuidevs'].users) {
+            for (let name in channels[token.channel].users) {
                 user_list.push('<'+name+'>')
             }
 
@@ -137,7 +137,7 @@ client.on('message', msg => {
         }
     } else if ( msg.channel.type == 'text' ) {
         if ( ircClients[msg.author.id] ) {
-            ircClients[msg.author.id].say('#wowuidevs', msg.content)
+            ircClients[msg.author.id].say(token.channel, msg.content)
         }
     }
 });

@@ -1,11 +1,12 @@
 var irc = require('irc');
+const token = require('./token.json');
 
 function NewClient(id, nick, password, discordClient) {
 
     console.log('Irc:NewClient', id, nick)
 
-    var clientIrc = new irc.Client('chat.freenode.net', nick,{
-        channels: ['#wowuidevs'],
+    var clientIrc = new irc.Client(token.ircserver, nick,{
+        channels: [token.channel],
     });
 
     clientIrc.addListener('registered', function() {
