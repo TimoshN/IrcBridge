@@ -9,13 +9,13 @@ nconf.load();
 // nconf.save();
 
 // let aboutus = nconf.get('aboutus')
-function Register(id, info ) {
+function Register(id) {
     
     if ( GetInfoByID( id ) ) {
         return false
     }
 
-    nconf.set('registered:'+id, info)
+    nconf.set('registered:'+id, true)
     nconf.save();
 
     return true
@@ -41,20 +41,6 @@ function GetInfoByID( id ) {
     return info
 }
 
-function GetInfoByNick( nick ) {
-    var list = nconf.get('registered')
-
-    for (id in list) {
-        if ( list[id].nick === nick ) {
-            
-            console.log('GetInfoByNick:info=', list[id])
-
-            return list[id]
-        }
-    }
-
-}
-
 function GetRegistered() {
     var list = nconf.get('registered')
 
@@ -67,6 +53,5 @@ module.exports = {
     Register:Register,
     Unregister:Unregister,
     GetInfoByID:GetInfoByID,
-    GetInfoByNick:GetInfoByNick,
     GetRegistered:GetRegistered,
 }
