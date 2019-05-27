@@ -99,7 +99,7 @@ const client = new Discord.Client();
 //const webhook = new Discord.WebhookClient(token.webhookid, token.webhookkey)
 
 function setupRoles(guild, role) {
-    role.setPermissions(['SEND_MESSAGES', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL'])
+    role.setPermissions(['SEND_MESSAGES', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL', 'EMBED_LINKS', 'MENTION_EVERYONE'])
     
     guild.members.find(function(x){
         if ( x.id != client.user.id ) {
@@ -149,6 +149,8 @@ client.on('ready', () => {
             MANAGE_MESSAGES: false,
             READ_MESSAGE_HISTORY: false,
             VIEW_CHANNEL: false,
+            EMBED_LINKS: false,
+            MENTION_EVERYONE: false,
         });
 
         console.log('Check role ', token.discord_role_name)
@@ -165,7 +167,7 @@ client.on('ready', () => {
                 position: 1,
                 permissions: [67325505],
                 managed: false,
-                mentionable: false
+                mentionable: false,
             }, 'IrcBridge role')
         } else {
             console.log('Role ',token.discord_role_name,' already exists')
@@ -177,6 +179,8 @@ client.on('ready', () => {
             MANAGE_MESSAGES: true,
             READ_MESSAGE_HISTORY: true,
             VIEW_CHANNEL: true,
+            EMBED_LINKS: true,
+            MENTION_EVERYONE: true,
         });
 
         channel.send('<Online>')
