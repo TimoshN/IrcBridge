@@ -28,8 +28,6 @@ ns.Notice = function(password, ircClient){
 
 ns.Message = function ( discordClient ) {
     return function( from, to, message ) {
-        console.log('Basic:', from + ' => ' + to + ': ' + message);
-
         if ( nickToID[from] ) {
 
         } else {       
@@ -42,8 +40,6 @@ ns.Message = function ( discordClient ) {
 
 ns.PM = function(id, discordClient) {
     return function (from, message) {
-        console.log('PM', from + ' => ME: ' + message);
-
         discordClient.users.find( x => x.id === id ).send('<'+from+'> '+message)
     }
 }
