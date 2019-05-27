@@ -91,8 +91,8 @@ function NewClient(id, nick, password, discordClient) {
 
     var clientIrc = new irc.Client(token.ircserver, nick,{
         autoConnect: false,
-        userName: 'IrcBridge',
-        realName: 'Test irc bridge for discord',
+        userName: 'Discord irc client',
+        realName: 'Test irc client for discord',
     });
 
     clientIrc.addListener('registered', ns.Register )
