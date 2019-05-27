@@ -31,8 +31,12 @@ ns.Message = function ( discordClient ) {
         if ( nickToID[from] ) {
 
         } else {       
-            discordClient.send(message, { username:from }).catch(err => {
-                console.log('Message', err)
+            discordClient.guilds.find(function(guild){
+                var channel = guild.channels.find(c => c.name === token.discord_chat_name)
+                
+                if ( channel ) {
+                    channel.send('<'+from+'> '+message)
+                }
             })
         }
     }
