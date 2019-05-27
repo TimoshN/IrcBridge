@@ -60,8 +60,6 @@ const commands = {
             target_msg.push( msg_command[i] )
         }
 
-        console.log('Msg to', target, target_msg.join(' '))
-
         if ( ircClients[msg.author.id] ) {
             ircClients[msg.author.id].say(target, target_msg.join(' '))
         }
@@ -98,7 +96,7 @@ const commands = {
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const webhook = new Discord.WebhookClient(token.webhookid, token.webhookkey)
+//const webhook = new Discord.WebhookClient(token.webhookid, token.webhookkey)
 
 function setupRoles(guild, role) {
     role.setPermissions(['SEND_MESSAGES', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL'])
@@ -122,7 +120,7 @@ client.on('ready', () => {
 
     console.log('client.user.id=', client.user.id)
 
-    ircReader = irc.StartReader(webhook)
+    ircReader = irc.StartReader(client) //webhook)
 
 
     var list = settings.GetRegistered() 
@@ -131,58 +129,62 @@ client.on('ready', () => {
         client.users.find( x => x.id === id ).send('<IrcBridge is online. Need type !login nick password to start chatting>')
     }
 
-    var guild = client.guilds.find(x => x.id === '581968083518881823' ) 
+    client.guilds.find(function(guild){
+     
+        console.log('Check ', token.discord_chat_name)
 
-    console.log('Check ', token.discord_chat_name)
+        var channel = guild.channels.find(c => c.name === token.discord_chat_name)
 
-    var channel = guild.channels.find(c => c.name === token.discord_chat_name)
+        if ( !channel ) {
+            console.log('Created ', token.discord_chat_name)
+            channel = guild.createChannel(token.discord_chat_name, 'text')
+        } else {
+            console.log(token.discord_chat_name, ' already created ')
+        }
+        
+        console.log('channel=', channel)
 
-    if ( !channel ) {
-        console.log('Created ', token.discord_chat_name)
-        channel = guild.createChannel(token.discord_chat_name, 'text')
-    } else {
-        console.log(token.discord_chat_name, ' already created ')
-    }
-    
-    channel.overwritePermissions(channel.guild.defaultRole, { 
-        SEND_MESSAGES: false,
-        MANAGE_MESSAGES: false,
-        READ_MESSAGE_HISTORY: false,
-        VIEW_CHANNEL: false,
-     });
+        channel.overwritePermissions(channel.guild.defaultRole, { 
+            SEND_MESSAGES: false,
+            MANAGE_MESSAGES: false,
+            READ_MESSAGE_HISTORY: false,
+            VIEW_CHANNEL: false,
+        });
 
-    console.log('Check role ', token.discord_role_name)
+        console.log('Check role ', token.discord_role_name)
 
-    var role = guild.roles.find(x => x.name === token.discord_role_name)
+        var role = guild.roles.find(x => x.name === token.discord_role_name)
 
-    if ( !role ) {
-        console.log('Create role ', token.discord_role_name)
+        if ( !role ) {
+            console.log('Create role ', token.discord_role_name)
 
-        role = guild.createRole({
-            name: token.discord_role_name,
-            color: 3066993,
-            hoist: false,
-            position: 1,
-            permissions: [67325505],
-            managed: false,
-            mentionable: false
-        }, 'IrcBridge role')
-    } else {
-        console.log('Role ',token.discord_role_name,' already exists')
-    }
-    setupRoles(guild, role)
+            role = guild.createRole({
+                name: token.discord_role_name,
+                color: 3066993,
+                hoist: false,
+                position: 1,
+                permissions: [67325505],
+                managed: false,
+                mentionable: false
+            }, 'IrcBridge role')
+        } else {
+            console.log('Role ',token.discord_role_name,' already exists')
+        }
+        setupRoles(guild, role)
 
-    channel.overwritePermissions(role, { 
-        SEND_MESSAGES: true,
-        MANAGE_MESSAGES: true,
-        READ_MESSAGE_HISTORY: true,
-        VIEW_CHANNEL: true,
-     });
+        channel.overwritePermissions(role, { 
+            SEND_MESSAGES: true,
+            MANAGE_MESSAGES: true,
+            READ_MESSAGE_HISTORY: true,
+            VIEW_CHANNEL: true,
+        });
 
-    webhook.send('<Online>', { username:'SystemMessage' }).catch(err => {
-        console.log('Message', err)
+        channel.send('<Online>')
+
+        // webhook.send('<Online>', { username:'SystemMessage' }).catch(err => {
+        //     console.log('Message', err)
+        // })
     })
-
 });
 
 client.on('message', msg => {
@@ -191,31 +193,17 @@ client.on('message', msg => {
         msg.reply('Pong!');
     }
 
-    console.log(client.user.id, msg.channel.type, msg.channel.name, msg.author.tag, msg.author.id, msg.content)
-
     if ( msg.author.id === client.user.id || msg.author.id === token.webhookid ) {
         return 
     }
 
-    console.log(msg.channel.type, msg.channel.name, msg.author.tag, msg.author.id, msg.content)
-
-    console.log('msg.content.startsWith(prefix)=', msg.content.startsWith(prefix))
-    
     if ( msg.channel.type == 'dm' ) {
      
         if (!msg.content.startsWith(prefix)){
             return;
         }
-        
-        console.log('Pass1')
-
-        console.log('command=', msg.content.toLowerCase().slice(prefix.length).split(' ')[0])
-        console.log('hasOwnProperty=', commands.hasOwnProperty(msg.content.toLowerCase().slice(prefix.length).split(' ')[0]))
-
+      
         if (commands.hasOwnProperty(msg.content.toLowerCase().slice(prefix.length).split(' ')[0])) {
-
-            console.log('Pass2')
-
             commands[msg.content.toLowerCase().slice(prefix.length).split(' ')[0]](msg);
         }
     } else if ( msg.channel.type == 'text' && msg.channel.name == token.discord_chat_name ) {

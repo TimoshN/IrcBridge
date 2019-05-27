@@ -4,8 +4,6 @@
     "channel" : "#wowuidev",
     "irclogin" : "YOUR IRC READER NICK",
     "ircpassword" : "YOUR IRC READER PASSWORD",
-    "webhookid" : "WEBHOOK ID FOR CHANNEL discord_chat_name",
-    "webhookkey" : "WEBHOOK KEY FOR CHANNEL discord_chat_name",
     "discord_chat_name" : "YOUR CHANNEL NAME IN DISCORD",
     "discord_role_name" : "YOUR ROLE NAME IN DISCORD"
 }
