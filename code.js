@@ -50,7 +50,7 @@ const commands = {
         let target = msg_command[1];
 
         if ( target ==  token.channel ) {
-            msg.reply('Use #irc-chat for public messages')
+            msg.reply('Use '+token.discord_chat_name+' for public messages')
             return
         }
 
@@ -75,11 +75,23 @@ const commands = {
                 user_list.push('<'+name+'>')
             }
 
-            msg.reply('Users: ```'+user_list.join(', ')+'```')
+            msg.reply('```Users:\n'+user_list.join(', ')+'```')
         }
     },
-    'help':function() {
-        msg.reply('<Commands>')
+    'help':function(msg) {
+
+        let msgBlock = '```Commands:\n'
+		
+		msgBlock += '!login nick password - join to irc channel\n'
+		msgBlock += '!register - let you warning about IrcBridge restart\n'
+		msgBlock += '!unregister - disable warning\n'
+		msgBlock += '!who - list of users in irc channel\n'
+		msgBlock += '!msg target msg - whisper to target\n'
+        msgBlock += '!help - list of commands\n'
+
+        msgBlock += "```"
+
+        msg.reply(msgBlock)
     }
 }
 
