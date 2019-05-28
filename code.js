@@ -147,8 +147,8 @@ client.on('ready', () => {
         channel.overwritePermissions(channel.guild.defaultRole, { 
             SEND_MESSAGES: false,
             MANAGE_MESSAGES: false,
-            READ_MESSAGE_HISTORY: false,
-            VIEW_CHANNEL: false,
+            READ_MESSAGE_HISTORY: true,
+            VIEW_CHANNEL: true,
             EMBED_LINKS: false,
             MENTION_EVERYONE: false,
         });
